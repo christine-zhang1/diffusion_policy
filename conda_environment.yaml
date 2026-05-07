@@ -1,4 +1,4 @@
-name: robodiff
+name: dp
 channels:
   - pytorch
   - pytorch3d
@@ -62,4 +62,5 @@ dependencies:
     # pip package required for jpeg-xl
     - imagecodecs==2022.9.26
     - r3m @ https://github.com/facebookresearch/r3m/archive/b2334e726887fa0206962d7984c69c5fb09cceab.tar.gz
+    - mujoco==2.3.7
     - dm-control==1.0.9

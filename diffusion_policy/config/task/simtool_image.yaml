@@ -1,0 +1,34 @@
+name: simtool_image
+
+# Ablation knob: prefix of the 140-D state to use as agent_pos.
+#   29  -> joint_pos only
+#   58  -> joint_pos + joint_vel
+state_dim: 29
+
+image_shape: [3, 192, 256]
+shape_meta:
+  obs:
+    image:
+      shape: ${task.image_shape}
+      type: rgb
+    agent_pos:
+      shape:
+        - ${task.state_dim}
+      type: low_dim
+  action:
+    shape: [29]
+
+env_runner:
+  _target_: diffusion_policy.env_runner.dummy_image_runner.DummyImageRunner
+
+dataset:
+  _target_: diffusion_policy.dataset.simtool_image_dataset.SimtoolImageDataset
+  zarr_path: /move/u/chrzhang/simtooldiff/data/stage5_train.zarr
+  horizon: ${horizon}
+  pad_before: ${eval:'${n_obs_steps}-1'}
+  pad_after: ${eval:'${n_action_steps}-1'}
+  seed: 42
+  val_ratio: 0.02
+  max_train_episodes: null
+  state_dim: ${task.state_dim}
+  image_shape: ${task.image_shape}
