@@ -23,7 +23,8 @@ env_runner:
 
 dataset:
   _target_: diffusion_policy.dataset.simtool_image_dataset.SimtoolImageDataset
-  zarr_path: /move/u/chrzhang/simtooldiff/data/stage5_train.zarr
+  # zarr_path: /move/u/chrzhang/simtooldiff/data/stage5_train.zarr
+  zarr_path: /move/u/karenvo/Projects/simtoolreal/data/pick_place_release_clean.zarr
   horizon: ${horizon}
   pad_before: ${eval:'${n_obs_steps}-1'}
   pad_after: ${eval:'${n_action_steps}-1'}
