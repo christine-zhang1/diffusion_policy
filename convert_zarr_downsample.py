@@ -1,26 +1,3 @@
-"""
-One-time: downsample the `img` array of a stage5 zarr to the resolution the
-policy actually trains at (default 192x256), losslessly w.r.t. model input.
-
-`SimtoolImageDataset._sample_to_data` already does, per sample:
-    img(uint8, HWC) -> CHW float/255 -> F.interpolate(bilinear, align_corners=False)
-                    -> (3, target_h, target_w)
-and SKIPS that interpolate when the stored image is already target size. So
-pre-applying the identical interpolation and storing uint8 192x256 makes the
-runtime path a no-op resize, while shrinking the in-RAM replay buffer ~4x
-(384x512 -> 192x256) and the on-disk/Volume read by the same factor.
-
-Run on the cluster (in the `dp` env), where the source zarr lives locally:
-    python convert_zarr_downsample.py \
-        --src data/stage5_train.zarr \
-        --dst data/stage5_train_192x256.zarr
-
-Then point training at the new zarr, e.g. override on the CLI:
-    python train.py --config-name=train_diffusion_unet_simtool_workspace \
-        task.dataset.zarr_path=$PWD/data/stage5_train_192x256.zarr
-(or edit zarr_path in diffusion_policy/config/task/simtool_image.yaml).
-"""
-
 import argparse
 import shutil
 from pathlib import Path
@@ -67,8 +44,7 @@ def main():
         dst_meta.array(key, val[:], chunks=val.chunks,
                        compressor=val.compressor, dtype=val.dtype)
 
-    # small data arrays (action/state/category_id/object_id): copy verbatim,
-    # preserving each array's original chunks + compressor.
+    # small data arrays (action/state/category_id/object_id): copy directly
     for key in src_data.keys():
         if key == "img":
             continue

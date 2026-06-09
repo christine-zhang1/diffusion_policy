@@ -1,32 +1,17 @@
 #!/bin/bash
-#SBATCH --account=nlp
-#SBATCH --cpus-per-task=4
-#SBATCH --exclude=jagupard[19-36]
-#SBATCH --gres=gpu:1
-#SBATCH --mem=32G
-#SBATCH --partition=jag-standard
+#SBATCH --account=move
+#SBATCH --partition=move --qos=normal
 #SBATCH --time=24:00:00
-#SBATCH --job-name="diffusion_policy"
-#SBATCH --output=/nlp/scr/chrzhang/logs/diffusion_policy-%j.out
-#SBATCH --error=/nlp/scr/chrzhang/logs/diffusion_policy-%j.err
-
-# SBATCH --account=move
-# SBATCH --partition=move --qos=normal
-# SBATCH --time=24:00:00
-# SBATCH --nodes=1
-# SBATCH --cpus-per-task=4
-# SBATCH --mem-per-cpu=32G
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem-per-cpu=32G
 
 # only use the following on partition with GPUs
-# SBATCH --gres=gpu:titanrtx:1
+#SBATCH --gres=gpu:titanrtx:1
 
-# SBATCH --job-name="diffusion_policy"
-# SBATCH --output=logs/diffusion_policy-%j.out
-# SBATCH --error=logs/diffusion_policy-%j.err
-
-# only use the following if you want email notification
-# SBATCH --mail-user=chrzhang@stanford.edu
-# SBATCH --mail-type=ALL
+#SBATCH --job-name="diffusion_policy"
+#SBATCH --output=logs/diffusion_policy-%j.out
+#SBATCH --error=logs/diffusion_policy-%j.err
 
 # list out some useful information (optional)
 echo "SLURM_JOBID="$SLURM_JOBID
